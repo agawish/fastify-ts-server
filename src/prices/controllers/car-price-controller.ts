@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { Inject, Service } from "typedi";
 import { ICarPrice } from "../models";
 import { ExternalPriceService } from "../services";
@@ -6,7 +5,8 @@ import { ExternalPriceService } from "../services";
 @Service()
 export class CarPriceController {
 
-    constructor(@Inject('default-price-service') private externalPriceService: ExternalPriceService, @Inject('uuid-generator') private generator: () => string) { }
+    constructor(@Inject('price-service') private externalPriceService: ExternalPriceService,
+        @Inject('uuid-generator') private generator: () => string) { }
 
     async getPrice(numberPlate: string, _skipCacheForRead = true): Promise<ICarPrice> {
         return {

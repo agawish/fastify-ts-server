@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { fastify } from "fastify";
 import Container from "typedi";
-import { CarPriceController, ICarPriceRequest } from "./prices";
+import { CarPriceController, ExternalPriceService, ICarPriceRequest } from "./prices";
 import { randomUUID } from 'crypto';
 
 const main = async () => {
@@ -17,8 +17,13 @@ const main = async () => {
         maximumFractionDigits: 2,
         currency: 'GBP'
     });
+
     Container.set('money-formatter', moneyFormatter);
+    Container.set('timeout', 2_000); //2 seconds
+    const externalPriceService = Container.get<ExternalPriceService>('slow-price-service');
     Container.set('uuid-generator', randomUUID);
+    Container.set('price-service', externalPriceService);
+
     const carPriceController = Container.get(CarPriceController);
 
 
