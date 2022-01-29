@@ -4,6 +4,9 @@ import Container from "typedi";
 import { CarPriceController, ExternalPriceService, ICarPriceRequest } from "./prices";
 import { randomUUID } from 'crypto';
 
+import cluster from 'cluster';
+import { cpus } from 'os';
+
 const main = async () => {
 
     const HOST = process.env.HOST || '127.0.0.1';
@@ -33,15 +36,21 @@ const main = async () => {
 
         return carPriceController.getPrice(numberPlate, false);
     });
-
-
     //Server
     server.listen(PORT, HOST, () => {
-        console.log(`Server running at http://${HOST}:${PORT}`);
+        console.log(`Worker server running on Process:${process.pid} at http://${HOST}:${PORT}`);
     });
-
 }
 
-main().catch(err => {
-    console.error(err);
-});
+
+if (cluster.isPrimary) {
+    console.log(`Primary Process: ${process.pid} is running`);
+
+    for (let i = 0; i < cpus().length; i++) {
+        cluster.fork();
+    }
+} else {
+    main().catch(err => {
+        console.error(err);
+    });
+};
