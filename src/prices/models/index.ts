@@ -1,0 +1,1 @@
+export { ICarPrice, ICarPriceRequest } from './car-prices-interface'

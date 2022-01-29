@@ -1,0 +1,1 @@
+export { CarPriceController } from './car-price-controller';
