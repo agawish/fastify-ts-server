@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto";
+import { Inject, Service } from "typedi";
 import { ICarPrice } from "../models";
 import { ExternalPriceService } from "../services";
 
+@Service()
 export class CarPriceController {
 
-    constructor(private readonly externalPriceService: ExternalPriceService) {
-        this.externalPriceService = externalPriceService;
-    }
+    constructor(@Inject('default-price-service') private externalPriceService: ExternalPriceService) {} 
 
     async getPrice(numberPlate: string, _skipCacheForRead = true): Promise<ICarPrice> {
         return {

@@ -1,22 +1,19 @@
 import { CarPriceController } from ".";
-import { ExternalPriceService } from "..";
+import { ExternalPriceService } from '..';
 
-describe('Car Price Controller', () => {
+fdescribe('Car Price Controller', () => {
 
-    it('Should return price and a unique UUID in GBP when instructed', () => {
-        const service = new CarPriceController(new ExternalPriceService("GBP"));
-        service.getPrice("ABC").then((result) => {
-            expect(result.price).toEqual("£60,000");
-            expect(result.uid).toBeDefined();
-        });
-    });
+    class FakeExternalService implements ExternalPriceService {
+        getExternalPrice(_numberPlate: string): Promise<string> {
+            return Promise.resolve('60,000');
+        }
+    }
 
-    it('Should return price and a unique UUID in USD when instructed', () => {
-        const service = new CarPriceController(new ExternalPriceService("USD"));
-        service.getPrice("ABC").then((result) => {
-            expect(result.price).toEqual("US$60,000");
-            expect(result.uid).toBeDefined();
-        });
+    it('Should return price and a unique UUID in GBP when instructed', async () => {
+        const service = new CarPriceController(new FakeExternalService());
+        const result = await service.getPrice("ABC");
+        expect(result.price).toEqual("60,000");
+        expect(result.uid).toBeDefined();
     });
 
 });
