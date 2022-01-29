@@ -12,7 +12,7 @@ Run `npm run dev`
 Run `npm start`
 ## How to test
 
-Run `npm run test`
+Run `npm test`
 
 ## How to build and bundle using Webpack
 
