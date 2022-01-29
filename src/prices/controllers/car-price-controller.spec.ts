@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
 
@@ -10,10 +11,11 @@ describe('Car Price Controller', () => {
     }
 
     it('Should return price and a unique UUID in GBP when instructed', async () => {
-        const service = new CarPriceController(new FakeExternalService());
-        const result = await service.getPrice("ABC");
-        expect(result.price).toEqual("60,000");
-        expect(result.uid).toBeDefined();
+        const controller = new CarPriceController(new FakeExternalService(), () => "1234");
+        await expectAsync(controller.getPrice("ABC")).toBeResolvedTo({
+            uid: "1234",
+            price: '60,000'
+        });
     });
 
 });

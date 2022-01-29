@@ -1,9 +1,6 @@
-import 'reflect-metadata';
 import { DefaultExternalPriceService } from '.';
 
-
-
-describe('External Price Service test', () => {
+describe('External Default Price Service test', () => {
 
     it('Should return price in USD when instructed', async () => {
         const moneyFormatter = Intl.NumberFormat('en-GB', {
@@ -13,8 +10,7 @@ describe('External Price Service test', () => {
             currency: 'USD'
         });
         const service = new DefaultExternalPriceService(moneyFormatter);
-        const result = await service.getExternalPrice("ABC");
-        expect(result).toEqual("US$60,000");
+        await expectAsync(service.getExternalPrice("ABC")).toBeResolvedTo("US$60,000");
     });
 
     it('Should return price in GBP when instructed', async () => {
@@ -25,8 +21,7 @@ describe('External Price Service test', () => {
             currency: 'GBP'
         });
         const service = new DefaultExternalPriceService(moneyFormatter);
-        const result = await service.getExternalPrice("ABC");
-        expect(result).toEqual("£60,000");
+        await expectAsync(service.getExternalPrice("ABC")).toBeResolvedTo("£60,000");
     });
 
     it('Should return 200,000 when using the Plate AB12CDE', async () => {
@@ -37,9 +32,7 @@ describe('External Price Service test', () => {
             currency: 'GBP'
         });
         const service = new DefaultExternalPriceService(moneyFormatter);
-        const result = await service.getExternalPrice("AB12CDE");
-        expect(result).toEqual("£200,000");
-
+        await expectAsync(service.getExternalPrice("AB12CDE")).toBeResolvedTo("£200,000");
     });
 
 });
