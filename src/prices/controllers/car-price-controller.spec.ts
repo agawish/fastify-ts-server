@@ -1,7 +1,7 @@
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
 
-fdescribe('Car Price Controller', () => {
+describe('Car Price Controller', () => {
 
     class FakeExternalService implements ExternalPriceService {
         getExternalPrice(_numberPlate: string): Promise<string> {

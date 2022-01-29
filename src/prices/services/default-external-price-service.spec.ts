@@ -29,4 +29,17 @@ describe('External Price Service test', () => {
         expect(result).toEqual("£60,000");
     });
 
+    it('Should return 200,000 when using the Plate AB12CDE', async () => {
+        const moneyFormatter = Intl.NumberFormat('en-GB', {
+            style: 'currency',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+            currency: 'GBP'
+        });
+        const service = new DefaultExternalPriceService(moneyFormatter);
+        const result = await service.getExternalPrice("AB12CDE");
+        expect(result).toEqual("£200,000");
+
+    });
+
 });
