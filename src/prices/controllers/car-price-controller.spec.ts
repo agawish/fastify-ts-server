@@ -1,8 +1,10 @@
+import { MemoryStorage } from "node-ts-cache-storage-memory";
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
 
 describe('Car Price Controller', () => {
     const timeout = 4_000; // 4 seconds
+
     class FakeExternalService implements ExternalPriceService {
         getExternalPrice(_numberPlate: string): Promise<string> {
             return Promise.resolve('60,000');
@@ -14,12 +16,8 @@ describe('Car Price Controller', () => {
         }
     }
 
-    beforeEach(() => jasmine.clock().install());
-
-    afterEach(() => jasmine.clock().uninstall());
-
     it('Should return price and a unique UUID in GBP when instructed', async () => {
-        const controller = new CarPriceController(new FakeExternalService(), () => "1234");
+        const controller = new CarPriceController(new FakeExternalService(), new MemoryStorage(), 8, () => "1234");
         await expectAsync(controller.getPrice("ABC")).toBeResolvedTo({
             uid: "1234",
             price: '60,000'
@@ -27,23 +25,34 @@ describe('Car Price Controller', () => {
     });
 
     it('Should return the result quickly if it is cached', async () => {
-        const controller = new CarPriceController(new FakeExternalSlowService(), () => "1234");
+        const slowService = new FakeExternalSlowService();
+        const storage = new MemoryStorage();
+        spyOn(slowService, 'getExternalPrice').and.returnValue(Promise.resolve('60,000'));
+        spyOn(storage, 'setItem');
+        spyOn(storage, 'getItem');
+        const controller = new CarPriceController(slowService, storage, 8, () => "1234");
 
-        controller.getPrice("ABC"); //Caching request
-        jasmine.clock().tick(4_000);
+        controller.getPrice("ABC"); //
         await expectAsync(controller.getPrice("ABC", false)).toBeResolvedTo({
             uid: "1234",
             price: '60,000'
         });
+        expect(slowService.getExternalPrice).toHaveBeenCalledTimes(1);
+        expect(storage.setItem).toHaveBeenCalledTimes(1);
+        expect(storage.getItem).toHaveBeenCalledTimes(1);
     });
 
 
-    it('Should return take the same amount of time to retrieve 2 different requests asking for the same plate', async () => {
-        const controller = new CarPriceController(new FakeExternalSlowService(), () => "1234");
-
+    it('Should take the same amount of time to retrieve 2 different requests asking for the same plate', async () => {
+        const slowService = new FakeExternalSlowService();
+        const storage = new MemoryStorage();
+        spyOn(slowService, 'getExternalPrice').and.returnValue(Promise.resolve('60,000'));
+        spyOn(storage, 'setItem');
+        spyOn(storage, 'getItem');
+        const controller = new CarPriceController(slowService, storage, 8, () => "1234");
+        
         let request1 = controller.getPrice("ABC", false);
-        let request2 = controller.getPrice("ABC", false); 
-        jasmine.clock().tick(4_000);
+        let request2 = controller.getPrice("ABC", false);
         await expectAsync(request1).toBeResolvedTo({
             uid: "1234",
             price: '60,000'
@@ -52,7 +61,9 @@ describe('Car Price Controller', () => {
             uid: "1234",
             price: '60,000'
         });
+        expect(slowService.getExternalPrice).toHaveBeenCalledTimes(1);
+        expect(storage.setItem).toHaveBeenCalledTimes(1);
+        expect(storage.getItem).toHaveBeenCalledTimes(2);
     });
-
 
 });

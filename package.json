@@ -16,6 +16,9 @@
   },
   "dependencies": {
     "fastify": "^3.27.0",
+    "node-ts-cache": "^4.4.0",
+    "node-ts-cache-storage-memory": "^4.4.0",
+    "node-ts-cache-storage-node-fs": "^4.4.0",
     "reflect-metadata": "^0.1.13",
     "typedi": "^0.10.0"
   },

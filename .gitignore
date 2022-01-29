@@ -105,3 +105,6 @@ dist
 
 # Compiled files
 target
+
+# Long Term Cache files
+db

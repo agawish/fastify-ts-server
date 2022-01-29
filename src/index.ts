@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto';
 
 import cluster from 'cluster';
 import { cpus } from 'os';
+import { NodeFsStorage } from 'node-ts-cache-storage-node-fs';
 
 const main = async () => {
 
@@ -25,6 +26,8 @@ const main = async () => {
     Container.set('timeout', 6_000); //Change to 6 seconds to test slow external service
     const externalPriceService = Container.get<ExternalPriceService>('slow-price-service');
     Container.set('uuid-generator', randomUUID);
+    Container.set('cache-storage', new NodeFsStorage(`${__dirname}/db/prices.json`));
+    Container.set('cache-ttl', 60 * 60); //1 hour
     Container.set('price-service', externalPriceService);
 
     const carPriceController = Container.get(CarPriceController);
