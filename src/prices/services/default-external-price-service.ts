@@ -8,9 +8,9 @@ export class DefaultExternalPriceService implements ExternalPriceService {
 
     getExternalPrice(numberPlate: string): Promise<string> {
         if (numberPlate === 'AB12CDE') {
-            return new Promise((resolve, _reject) => resolve(this.moneyFormatter.format(200_000)));
+            return Promise.resolve(this.moneyFormatter.format(200_000));
         } else {
-            return new Promise((resolve, _reject) => resolve(this.moneyFormatter.format(60_000)));
+            return Promise.resolve(this.moneyFormatter.format(60_000));
         }
     }
 }
