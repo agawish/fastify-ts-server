@@ -6,12 +6,12 @@ import { ExternalPriceService } from "../services";
 @Service()
 export class CarPriceController {
 
-    constructor(@Inject('default-price-service') private externalPriceService: ExternalPriceService) {} 
+    constructor(@Inject('default-price-service') private externalPriceService: ExternalPriceService, @Inject('uuid-generator') private generator: () => string) { }
 
     async getPrice(numberPlate: string, _skipCacheForRead = true): Promise<ICarPrice> {
         return {
-            uid: randomUUID(),   
+            uid: this.generator(),
             price: await this.externalPriceService.getExternalPrice(numberPlate)
         }
-    }    
+    }
 }

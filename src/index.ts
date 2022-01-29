@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { fastify } from "fastify";
 import Container from "typedi";
 import { CarPriceController, ICarPriceRequest } from "./prices";
+import { randomUUID } from 'crypto';
 
 const main = async () => {
 
@@ -9,6 +10,7 @@ const main = async () => {
     const PORT = process.env.PORT || 4000;
     const server = fastify();
 
+    //Dependency Injection definitions
     const moneyFormatter = Intl.NumberFormat('en-GB', {
         style: 'currency',
         minimumFractionDigits: 0,
@@ -16,15 +18,19 @@ const main = async () => {
         currency: 'GBP'
     });
     Container.set('money-formatter', moneyFormatter);
+    Container.set('uuid-generator', randomUUID);
     const carPriceController = Container.get(CarPriceController);
 
 
+    //Routes
     server.get<ICarPriceRequest>('/prices/:numberPlate', async (req, _reply) => {
         const numberPlate = req.params.numberPlate;
 
         return carPriceController.getPrice(numberPlate);
     });
 
+
+    //Server
     server.listen(PORT, HOST, () => {
         console.log(`Server running at http://${HOST}:${PORT}`);
     });
