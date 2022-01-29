@@ -19,7 +19,7 @@ const main = async () => {
     });
 
     Container.set('money-formatter', moneyFormatter);
-    Container.set('timeout', 2_000); //2 seconds
+    Container.set('timeout', 6_000); //Change to 6 seconds to test slow external service
     const externalPriceService = Container.get<ExternalPriceService>('slow-price-service');
     Container.set('uuid-generator', randomUUID);
     Container.set('price-service', externalPriceService);
@@ -31,7 +31,7 @@ const main = async () => {
     server.get<ICarPriceRequest>('/prices/:numberPlate', async (req, _reply) => {
         const numberPlate = req.params.numberPlate;
 
-        return carPriceController.getPrice(numberPlate);
+        return carPriceController.getPrice(numberPlate, false);
     });
 
 
