@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
 
@@ -42,8 +43,8 @@ describe('Car Price Controller', () => {
     it('Should return take the same amount of time to retrieve 2 different requests asking for the same plate', async () => {
         const controller = new CarPriceController(new FakeExternalSlowService(), () => "1234");
 
-        let request1 = controller.getPrice("ABC", false);
-        let request2 = controller.getPrice("ABC", false); 
+        const request1 = controller.getPrice("ABC", false);
+        const request2 = controller.getPrice("ABC", false); 
         jasmine.clock().tick(4_000);
         await expectAsync(request1).toBeResolvedTo({
             uid: "1234",

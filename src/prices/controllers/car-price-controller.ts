@@ -17,7 +17,7 @@ export class CarPriceController {
             return this.callExternalService(numberPlate);
         } else {
             //Check if the request is already in flight
-            let cachedItem = this.findRequestsInFlightOrCached(numberPlate);
+            const cachedItem = this.findRequestsInFlightOrCached(numberPlate);
             if (cachedItem !== undefined) { //We have another request in Flight
                 return this.getReponseFromPrice(cachedItem);
             } else {
@@ -27,7 +27,7 @@ export class CarPriceController {
     }
 
     private callExternalService(numberPlate: string): Promise<ICarPrice> {
-        let externalServiceCall = this.externalPriceService.getExternalPrice(numberPlate);
+        const externalServiceCall = this.externalPriceService.getExternalPrice(numberPlate);
         this.requestInFlight.push({
             numberPlate,
             expectedResult: externalServiceCall
