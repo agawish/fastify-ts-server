@@ -10,6 +10,7 @@ export class CarPriceController {
     constructor(@Inject('price-service') private externalPriceService: ExternalPriceService,
         @Inject('uuid-generator') private generator: () => string) { }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async getPrice(numberPlate: string, skipCacheForRead = true): Promise<ICarPrice> {
 
         if (skipCacheForRead) {

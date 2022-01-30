@@ -4,6 +4,7 @@ import { ExternalPriceService } from '..';
 describe('Car Price Controller', () => {
     const timeout = 4_000; // 4 seconds
     class FakeExternalService implements ExternalPriceService {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getExternalPrice(_numberPlate: string): Promise<string> {
             return Promise.resolve('60,000');
         }
