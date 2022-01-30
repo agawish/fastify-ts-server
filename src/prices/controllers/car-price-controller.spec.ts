@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { MemoryStorage } from "node-ts-cache-storage-memory";
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
@@ -6,6 +7,7 @@ describe('Car Price Controller', () => {
     const timeout = 4_000; // 4 seconds
 
     class FakeExternalService implements ExternalPriceService {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getExternalPrice(_numberPlate: string): Promise<string> {
             return Promise.resolve('60,000');
         }
@@ -50,7 +52,7 @@ describe('Car Price Controller', () => {
         spyOn(storage, 'setItem');
         spyOn(storage, 'getItem');
         const controller = new CarPriceController(slowService, storage, 8, () => "1234");
-        
+
         let request1 = controller.getPrice("ABC", false);
         let request2 = controller.getPrice("ABC", false);
         await expectAsync(request1).toBeResolvedTo({

@@ -16,6 +16,7 @@ export class CarPriceController {
         this.longTermCache = new CacheContainer(cacheStorage);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async getPrice(numberPlate: string, skipCacheForRead = true): Promise<ICarPrice> {
         if (skipCacheForRead) {
             return this.callExternalService(numberPlate);

@@ -9,10 +9,9 @@ import { cpus } from 'os';
 import { NodeFsStorage } from 'node-ts-cache-storage-node-fs';
 
 const main = async () => {
-
-    const HOST = process.env.HOST || '127.0.0.1';
-    const PORT = process.env.PORT || 4000;
-    const server = fastify();
+  const HOST = process.env.HOST || '127.0.0.1';
+  const PORT = process.env.PORT || 4000;
+  const server = fastify();
 
     //Dependency Injection definitions
     const moneyFormatter = Intl.NumberFormat('en-GB', {
@@ -32,10 +31,9 @@ const main = async () => {
 
     const carPriceController = Container.get(CarPriceController);
 
-
-    //Routes
-    server.get<ICarPriceRequest>('/prices/:numberPlate', async (req, _reply) => {
-        const numberPlate = req.params.numberPlate;
+  // Routes
+  server.get<ICarPriceRequest>('/prices/:numberPlate', async (req) => {
+    const { numberPlate } = req.params;
 
         return carPriceController.getPrice(numberPlate, false);
     });
