@@ -54,4 +54,4 @@ if (cluster.isPrimary) {
     main().catch(err => {
         console.error(err);
     });
-};
+}

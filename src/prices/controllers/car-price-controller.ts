@@ -28,7 +28,7 @@ export class CarPriceController {
                 return this.getReponseFromPrice(permCacheValue);
             } else {
                 //Then we check if the request is already in flight
-                let inFlightItem = this.findRequestsInFlight(numberPlate);
+                const inFlightItem = this.findRequestsInFlight(numberPlate);
                 if (inFlightItem) { //We have another request in Flight
                     return this.getReponseFromPrice(await inFlightItem);
                 } else {
@@ -39,12 +39,12 @@ export class CarPriceController {
     }
 
     private async callExternalService(numberPlate: string): Promise<ICarPrice> {
-        let externalServiceCall = this.externalPriceService.getExternalPrice(numberPlate);
+        const externalServiceCall = this.externalPriceService.getExternalPrice(numberPlate);
         const index = this.requestInFlight.push({
             numberPlate,
             expectedResult: externalServiceCall
         });
-        let evaluatedPrice = await externalServiceCall;
+        const evaluatedPrice = await externalServiceCall;
         this.longTermCache.setItem(numberPlate, evaluatedPrice, { ttl: this.cacheTTL });
         this.requestInFlight.splice(index, 1); //Remove from in Flight
         return this.getReponseFromPrice(evaluatedPrice);

@@ -53,8 +53,8 @@ describe('Car Price Controller', () => {
         spyOn(storage, 'getItem');
         const controller = new CarPriceController(slowService, storage, 8, () => "1234");
 
-        let request1 = controller.getPrice("ABC", false);
-        let request2 = controller.getPrice("ABC", false);
+        const request1 = controller.getPrice("ABC", false);
+        const request2 = controller.getPrice("ABC", false);
         await expectAsync(request1).toBeResolvedTo({
             uid: "1234",
             price: '60,000'
