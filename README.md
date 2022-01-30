@@ -17,3 +17,11 @@ Run `npm test`
 ## How to build and bundle using Webpack
 
 Run `npm run build`
+
+## How to build the docker image
+
+Run `docker build -t fastify-ts-server .`
+
+## How to run already built docker image
+
+Run `docker run -d -p 4000:4000 fastify-ts-server` 
