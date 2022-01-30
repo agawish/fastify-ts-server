@@ -1,10 +1,10 @@
-import { randomUUID } from "crypto";
 import { CarPriceController } from ".";
 import { ExternalPriceService } from '..';
 
 describe('Car Price Controller', () => {
 
     class FakeExternalService implements ExternalPriceService {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getExternalPrice(_numberPlate: string): Promise<string> {
             return Promise.resolve('60,000');
         }
